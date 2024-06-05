@@ -61,6 +61,7 @@ def main():
     # Step 3: Store the extracted data in the database
     try:
         print('storing data received to database')
+        print(all_menu_data)
         store_menu_data(all_menu_data)
     except Exception as e:
         print(f"Error storing data: {e}")
