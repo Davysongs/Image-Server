@@ -1,9 +1,10 @@
 import csv
 import time
+import os
 from requests.exceptions import ConnectionError, Timeout, RequestException
 from src.scraper.scraper import scrape_menu_images
 from src.ocr.ocr import perform_ocr
-from src.database.database import store_menu_data
+from src.database.database import store_menu_data, create_database
 from dotenv import load_dotenv
 
 load_dotenv()
@@ -59,10 +60,12 @@ def main():
 
     # Step 3: Store the extracted data in the database
     try:
-        print('storing data recieved to database')
+        print('storing data received to database')
         store_menu_data(all_menu_data)
     except Exception as e:
         print(f"Error storing data: {e}")
 
 if __name__ == "__main__":
+    # Check if the database exists, if not, create it
+    create_database()
     main()
