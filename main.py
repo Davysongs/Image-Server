@@ -50,6 +50,7 @@ def main():
 
         # Step 2: Perform OCR on the images
         menu_data = []
+        print(f"performing ocr on images...")
         for image in images:
             data = perform_ocr(image)
             menu_data.extend(data)
@@ -57,7 +58,11 @@ def main():
         all_menu_data.extend(menu_data)
 
     # Step 3: Store the extracted data in the database
-    store_menu_data(all_menu_data)
+    try:
+        print('storing data recieved to database')
+        store_menu_data(all_menu_data)
+    except Exception as e:
+        print(f"Error storing data: {e}")
 
 if __name__ == "__main__":
     main()
