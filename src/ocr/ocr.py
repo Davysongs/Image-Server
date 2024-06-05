@@ -9,7 +9,11 @@ from dotenv import load_dotenv
 load_dotenv()
 
 # Set the Tesseract command path from environment variable
-pytesseract.pytesseract.tesseract_cmd = os.getenv("TESSERACT_CMD")
+tesseract_cmd = os.getenv("TESSERACT_CMD")
+if tesseract_cmd:
+    pytesseract.pytesseract.tesseract_cmd = tesseract_cmd
+else:
+    raise EnvironmentError("TESSERACT_CMD is not set in the environment variables.")
 
 def extract_menu_items(text):
     menu_items = []
@@ -27,16 +31,3 @@ def perform_ocr(image_path):
     text = pytesseract.image_to_string(img)
     return extract_menu_items(text)
 
-
-def scrape_menu_images(url):
-    response = requests.get(url)
-    soup = BeautifulSoup(response.text, 'html.parser')
-    images = []
-    for img in soup.find_all('img'):
-        img_url = img['src']
-        img_response = requests.get(img_url)
-        img_name = os.path.join('src/data', img_url.split('/')[-1])
-        with open(img_name, 'wb') as f:
-            f.write(img_response.content)
-        images.append(img_name)
-    return images
