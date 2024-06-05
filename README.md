@@ -1,4 +1,4 @@
-#Restaurant Menu Scraper
+##Restaurant Menu Scraper
 
 This project scrapes restaurant menu images for restaurants in Mumbai, performs OCR (Optical Character Recognition) to read the menu items and prices, and stores this data in a database.
 
