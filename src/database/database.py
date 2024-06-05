@@ -1,4 +1,4 @@
-from sqlalchemy import create_engine, Column, Integer, String, Float, MetaData, Table
+from sqlalchemy import create_engine, Column, Integer, String, Float, MetaData
 from sqlalchemy.ext.declarative import declarative_base
 from sqlalchemy.orm import sessionmaker
 import os
@@ -6,7 +6,7 @@ from dotenv import load_dotenv
 
 load_dotenv()
 
-DATABASE_URL = os.getenv("DATABASE_URL")
+DATABASE_URL = os.getenv("DATABASE_URL", "sqlite:///menus.db")  # Default to 'menus.db' in the local directory
 Base = declarative_base()
 
 class MenuItem(Base):
@@ -24,12 +24,18 @@ def store_menu_data(menu_data):
     Session = sessionmaker(bind=engine)
     session = Session()
 
-    for data in menu_data:
-        # Here you should parse the data to extract menu items and prices
-        # For now, we will assume data is a list of dictionaries with 'name' and 'price' keys
-        for item in data:
-            menu_item = MenuItem(name=item['name'], price=item['price'])
-            session.add(menu_item)
+    for item in menu_data:
+        menu_item = MenuItem(name=item['name'], price=item['price'])
+        session.add(menu_item)
 
     session.commit()
     session.close()
+
+if __name__ == "__main__":
+    # Check if the database file exists
+    db_file = DATABASE_URL.split("///")[-1]
+    if not os.path.exists(db_file):
+        print("Database not found. Creating a new database.")
+        create_tables()
+    else:
+        print("Database already exists.")
