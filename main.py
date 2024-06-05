@@ -24,12 +24,16 @@ def main():
     for link in restaurant_links:
         print(f"Processing {link}")
 
+        # Initialize images list
+        images = []
+
         # Retry logic with exponential backoff
         retries = 5
         for attempt in range(retries):
             try:
                 # Step 1: Scrape menu images
                 images = scrape_menu_images(link)
+                print(f"Successfully scraped {len(images)} images from {link}")
                 break  # Exit the retry loop if successful
             except (ConnectionError, Timeout) as e:
                 wait = 2 ** attempt  # Exponential backoff
