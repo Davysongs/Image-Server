@@ -1,6 +1,13 @@
 import requests
 from bs4 import BeautifulSoup
 import os
+import re
+
+def sanitize_filename(filename):
+    """
+    Remove or replace invalid characters in filenames.
+    """
+    return re.sub(r'[\\/*?:"<>|]', "_", filename)
 
 def scrape_menu_images(url):
     headers = {
@@ -16,7 +23,8 @@ def scrape_menu_images(url):
         if img_url and img_url.startswith('http'):
             img_response = requests.get(img_url, headers=headers)
             img_response.raise_for_status()
-            img_name = os.path.join('src/data', os.path.basename(img_url))
+            # Sanitize the image filename
+            img_name = os.path.join('src/data', sanitize_filename(os.path.basename(img_url)))
             with open(img_name, 'wb') as f:
                 f.write(img_response.content)
             images.append(img_name)
