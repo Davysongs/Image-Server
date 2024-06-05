@@ -4,7 +4,9 @@ from requests.exceptions import ConnectionError, Timeout, RequestException
 from src.scraper.scraper import scrape_menu_images
 from src.ocr.ocr import perform_ocr
 from src.database.database import store_menu_data
-import os
+from dotenv import load_dotenv
+
+load_dotenv()
 
 def read_restaurant_links(csv_file):
     links = []

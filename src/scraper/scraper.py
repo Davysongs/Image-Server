@@ -2,6 +2,9 @@ import requests
 from bs4 import BeautifulSoup
 import os
 import re
+from dotenv import load_dotenv
+
+load_dotenv()
 
 def sanitize_filename(filename):
     """
@@ -18,13 +21,19 @@ def scrape_menu_images(url):
 
     soup = BeautifulSoup(response.text, 'html.parser')
     images = []
+
+    # Ensure the data directory exists
+    data_dir = 'src/data'
+    if not os.path.exists(data_dir):
+        os.makedirs(data_dir)
+
     for img in soup.find_all('img'):
         img_url = img.get('src')
         if img_url and img_url.startswith('http'):
             img_response = requests.get(img_url, headers=headers)
             img_response.raise_for_status()
             # Sanitize the image filename
-            img_name = os.path.join('src/data', sanitize_filename(os.path.basename(img_url)))
+            img_name = os.path.join(data_dir, sanitize_filename(os.path.basename(img_url)))
             with open(img_name, 'wb') as f:
                 f.write(img_response.content)
             images.append(img_name)
