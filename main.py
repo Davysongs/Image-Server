@@ -16,7 +16,7 @@ def read_restaurant_links(csv_file):
 
 def main():
     # Read restaurant links from CSV
-    csv_file = 'sample_restaurants.csv'
+    csv_file = 'restaurants.csv'
     restaurant_links = read_restaurant_links(csv_file)
 
     all_menu_data = []
